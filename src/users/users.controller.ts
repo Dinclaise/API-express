@@ -5,10 +5,17 @@ import { ILogger } from './../logger/logger.interface';
 import { TYPES } from '../types';
 import 'reflect-metadata';
 import { IUsersController } from './users.interface';
+import { UserLoginDto } from './dto/user-login.dto';
+import { UserRegisterDto } from './dto/user-register.dto';
+import { User } from './entity/users.entity';
+import { HTTPError } from './../errors/http-error.class';
 
 @injectable()
 export class UsersController extends BaseController implements IUsersController {
-	constructor(@inject(TYPES.ILogger) private loggerService: ILogger) {
+	constructor(
+		@inject(TYPES.ILogger) private loggerService: ILogger,
+		@inject(TYPES.UserService) private usersService: UserService,
+	) {
 		super(loggerService);
 		this.bindRouter([
 			{ path: '/register', method: 'post', func: this.register },
@@ -16,11 +23,20 @@ export class UsersController extends BaseController implements IUsersController 
 		]);
 	}
 
-	login(req: Request, res: Response, next: NextFunction): void {
+	login(req: Request<{}, {}, UserLoginDto>, res: Response, next: NextFunction): void {
 		this.ok(res, 'login');
 	}
 
-	register(req: Request, res: Response, next: NextFunction): void {
-		this.ok(res, 'register');
+	async register(
+		{ body }: Request<{}, {}, UserRegisterDto>,
+		res: Response,
+		next: NextFunction,
+	): Promise<void> {
+		const result = await this.usersService.createUser(body);
+
+		if (!result) {
+			return next(new HTTPError(422, 'Такой пользователь существует!'));
+		}
+		this.ok(res, result);
 	}
 }

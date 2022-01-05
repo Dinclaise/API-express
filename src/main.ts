@@ -6,11 +6,15 @@ import { UsersController } from './users/users.controller';
 import { ILogger } from './logger/logger.interface';
 import { TYPES } from './types';
 import { IExceptionFilter } from './errors/exception.filter.interface';
+import { IUsersController } from './users/users.interface';
+import { IUsersService } from './users/service/users.service.interface';
+import { UserService } from './users/service/users.service';
 
 const appBindings = new ContainerModule((bind: interfaces.Bind) => {
 	bind<ILogger>(TYPES.ILogger).to(LoggerService);
 	bind<IExceptionFilter>(TYPES.ErrorExceptionFilter).to(ErrorExceptionFilter);
-	bind<UsersController>(TYPES.UserController).to(UsersController);
+	bind<IUsersController>(TYPES.UserController).to(UsersController);
+	bind<IUsersService>(TYPES.UserService).to(UserService);
 	bind<App>(TYPES.Application).to(App);
 });
 

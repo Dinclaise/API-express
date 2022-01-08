@@ -10,7 +10,8 @@
 		"lint": "eslint ./src/**",
 		"lint:fix": "eslint ./src/** --fix",
 		"dev": "nodemon",
-		"dev:inspect": "nodemon -e ts,json --exec node --inspect=localhost:9222 -r ts-node/register src/main.ts"
+		"dev:inspect": "nodemon -e ts,json --exec node --inspect=localhost:9222 -r ts-node/register src/main.ts",
+		"generate": "prisma generate"
 	},
 	"repository": {
 		"type": "git",
@@ -23,6 +24,7 @@
 	},
 	"homepage": "https://github.com/Dinclaise/API-express#readme",
 	"dependencies": {
+		"@prisma/client": "^3.7.0",
 		"bcryptjs": "^2.4.3",
 		"body-parser": "^1.19.1",
 		"class-transformer": "^0.5.1",
@@ -43,6 +45,7 @@
 		"eslint-plugin-prettier": "^4.0.0",
 		"nodemon": "^2.0.15",
 		"prettier": "^2.5.1",
+		"prisma": "^3.7.0",
 		"ts-node": "^10.4.0",
 		"typescript": "^4.5.4"
 	}

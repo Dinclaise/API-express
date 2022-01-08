@@ -7,8 +7,8 @@ import 'reflect-metadata';
 import { IUsersController } from './users.interface';
 import { UserLoginDto } from './dto/user-login.dto';
 import { UserRegisterDto } from './dto/user-register.dto';
-import { User } from './entity/users.entity';
 import { HTTPError } from './../errors/http-error.class';
+import { UserService } from './service/users.service';
 
 @injectable()
 export class UsersController extends BaseController implements IUsersController {

@@ -12,6 +12,7 @@ import { ValidateMiddleware } from './../common/validate.middleware';
 import { sign } from 'jsonwebtoken';
 import { IConfigService } from './../config/config.service.interface';
 import { IUsersService } from './service/users.service.interface';
+import { AuthGuard } from './../common/auth/auth.guard';
 
 @injectable()
 export class UsersController extends BaseController implements IUsersController {
@@ -33,6 +34,12 @@ export class UsersController extends BaseController implements IUsersController 
 				method: 'post',
 				func: this.login,
 				middlewares: [new ValidateMiddleware(UserLoginDto)],
+			},
+			{
+				path: '/info',
+				method: 'get',
+				func: this.login,
+				middlewares: [new AuthGuard()],
 			},
 		]);
 	}
@@ -64,6 +71,15 @@ export class UsersController extends BaseController implements IUsersController 
 			return next(new HTTPError(422, 'Такой пользователь существует!'));
 		}
 		this.ok(res, { id: result.id, email: result.email });
+	}
+
+	async info(
+		{ user }: Request<{}, {}, UserRegisterDto>,
+		res: Response,
+		next: NextFunction,
+	): Promise<void> {
+		const userInfo = this.usersService.getUserInfo(user);
+		this.ok(res, { email: userInfo?.email, id: userInfo?.id });
 	}
 
 	private signJWT(email: string, secret: string): Promise<string> {
